@@ -25,45 +25,78 @@ st.caption('Oleh Muhammad Dava Pasha (Dicoding)')
 
 # Fixed section
 
-jumlah_perbulan = day_raw.groupby(by='mnth')['cnt'].sum().reset_index()
-line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
+st.markdown('### Grafik Analisis')
+st.markdown('## Grafik untuk menjawab pertanyaan bisnis yang sudah ada')
 
-with line_tab:
-    st.line_chart(jumlah_perbulan, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
+existing_graph = st.expander("Grafik untuk menjawab pertanyaan bisnis yang sudah ada")
 
-with bar_tab:
-    st.bar_chart(jumlah_perbulan, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
+with existing_graph:
+    graph_rent, graph_weather = st.tabs(['Rent Graph', 'Rent Graph based on Weather'])
+
+    with graph_rent:
+        jumlah_perbulan = day_raw.groupby(by='mnth')['cnt'].sum().reset_index()
+        st.line_chart(jumlah_perbulan, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
+
+    with graph_weather:
+        penyewa_cerah = day_raw[day_raw['weathersit'] == 'Cerah'].groupby(by='mnth')['cnt'].sum().reset_index()
+        penyewa_mendung = day_raw[day_raw['weathersit'] == 'Mendung'].groupby(by='mnth')['cnt'].sum().reset_index()
+        penyewa_gerimis = day_raw[day_raw['weathersit'] == 'Gerimis'].groupby(by='mnth')['cnt'].sum().reset_index()
 
 
-# Interaktif section
+        cerah, mendung, gerimis = st.tabs(['Clear Skies', 'Cloudy', 'Light Rain'])
 
-option = st.selectbox(
-    'Pilih grafik penyewaan sepeda untuk bulan?',
-    months,
-)
+        with cerah:
+            st.line_chart(penyewa_cerah, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
+        with mendung:
+            st.line_chart(penyewa_mendung, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-month_index = months.index(option) + 1
-month_result = day_raw.loc[day_raw['mnth'] == month_index]
+        with gerimis:
+            st.line_chart(penyewa_gerimis, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-with line_tab:
-    st.line_chart(month_result, x='day', y='cnt', x_label='Hari', y_label='Jumlah')
 
-with bar_tab:
-    st.bar_chart(month_result, x='day', y='cnt', x_label='Hari', y_label='Jumlah')
+variable_graph = st.expander("Grafik sesuai keinginan")
 
-option = st.selectbox(
-    'Pilih grafik penyewaan sepeda untuk cuaca?',
-    ('Cerah', 'Gerimis', 'Mendung'),
-)
+with variable_graph:
+    jumlah_perbulan = day_raw.groupby(by='mnth')['cnt'].sum().reset_index()
+    line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
 
-weather_result = day_raw[day_raw['weathersit'] == option].groupby(by='mnth')['cnt'].sum().reset_index()
+    with line_tab:
+        st.line_chart(jumlah_perbulan, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
+    with bar_tab:
+        st.bar_chart(jumlah_perbulan, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-with line_tab:
-    st.line_chart(weather_result, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
 
-with bar_tab:
-    st.bar_chart(weather_result, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
+    # Interaktif section
+
+    option = st.selectbox(
+        'Pilih grafik penyewaan sepeda untuk bulan?',
+        months,
+    )
+
+    line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
+
+    month_index = months.index(option) + 1
+    month_result = day_raw.loc[day_raw['mnth'] == month_index]
+
+    with line_tab:
+        st.line_chart(month_result, x='day', y='cnt', x_label='Hari', y_label='Jumlah')
+
+    with bar_tab:
+        st.bar_chart(month_result, x='day', y='cnt', x_label='Hari', y_label='Jumlah')
+
+    option = st.selectbox(
+        'Pilih grafik penyewaan sepeda untuk cuaca?',
+        ('Cerah', 'Gerimis', 'Mendung'),
+    )
+
+    weather_result = day_raw[day_raw['weathersit'] == option].groupby(by='mnth')['cnt'].sum().reset_index()
+
+    line_tab, bar_tab = st.tabs(["Grafik Garis", "Grafik Batang"])
+
+    with line_tab:
+        st.line_chart(weather_result, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
+
+    with bar_tab:
+        st.bar_chart(weather_result, x='mnth', y='cnt', x_label='Bulan', y_label='Jumlah')
