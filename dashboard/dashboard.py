@@ -31,7 +31,7 @@ st.markdown('## Grafik untuk menjawab pertanyaan bisnis yang sudah ada')
 existing_graph = st.expander("Grafik untuk menjawab pertanyaan bisnis yang sudah ada")
 
 with existing_graph:
-    graph_rent, graph_weather = st.tabs(['Rent Graph', 'Rent Graph based on Weather'])
+    graph_rent, graph_weather = st.tabs(['Rent Graph', 'Effect weather on Renting bike'])
 
     with graph_rent:
         jumlah_perbulan = day_raw.groupby(by='mnth')['cnt'].sum().reset_index()
